@@ -36,7 +36,7 @@ macro(torch_mlir_add_llvm_external_project name identifier location)
   set(LLVM_EXTERNAL_PROJECTS ${LLVM_EXTERNAL_PROJECTS} CACHE STRING "" FORCE)
 endmacro()
 
-option(TORCH_MLIR_ENABLE_MHLO "Add mhlo dialect" ON)
+option(TORCH_MLIR_ENABLE_MHLO "Add mhlo dialect" OFF)
 if(TORCH_MLIR_ENABLE_MHLO)
   add_definitions(-DTORCH_MLIR_ENABLE_MHLO)
   # The i64 calculation is much slower than i32 on some devices, such as Nvidia GPU.
@@ -47,6 +47,11 @@ if(TORCH_MLIR_ENABLE_MHLO)
   if(TORCH_MLIR_ENABLE_MHLO_TRUNC_DIMSIZE_TO_I32)
     add_definitions(-DTORCH_MLIR_ENABLE_MHLO_TRUNC_DIMSIZE_TO_I32)
   endif()
+endif()
+
+option(TORCH_MLIR_ENABLE_ONNX "Add onnx dialect" OFF)
+if(TORCH_MLIR_ENABLE_ONNX)
+  add_definitions(-DTORCH_MLIR_ENABLE_ONNX)
 endif()
 
 option(TORCH_MLIR_ENABLE_LTC "Enables LTC backend" ON)
@@ -99,6 +104,11 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   add_subdirectory(externals/llvm-external-projects/torch-mlir-dialects)
 else()
   message(STATUS "Torch-MLIR in-tree build.")
+
+  if(TORCH_MLIR_ENABLE_ONNX)
+    message(FATAL_ERROR "ONNX-MLIR only supported for out-of-tree builds")
+  endif()
+
   # In-tree build with LLVM_EXTERNAL_PROJECTS=torch-mlir
   if (TORCH_MLIR_ENABLE_MHLO)
     set(MLIR_PDLL_TABLEGEN_EXE mlir-pdll)
@@ -121,6 +131,15 @@ if (TORCH_MLIR_ENABLE_MHLO)
     EXCLUDE_FROM_ALL)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/externals/mlir-hlo/include)
   include_directories(${CMAKE_CURRENT_BINARY_DIR}/mlir-hlo/include)
+endif()
+
+if (TORCH_MLIR_ENABLE_ONNX)
+  set(ONNX_BUILD_EMBEDDED ON)
+  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir
+    ${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir
+    EXCLUDE_FROM_ALL)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir/src)
+  include_directories(${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir/src)
 endif()
 
 set(TORCH_MLIR_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")

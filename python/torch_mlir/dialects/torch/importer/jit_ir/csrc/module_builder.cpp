@@ -7,6 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include <iostream>
+
 #include "module_builder.h"
 
 #include "function_importer.h"
@@ -18,6 +20,8 @@
 #include "mlir-c/BuiltinTypes.h"
 #include "mlir-c/Diagnostics.h"
 #include "torch-mlir-c/Registration.h"
+
+#include "llvm/Support/SourceMgr.h"
 
 namespace py = pybind11;
 using namespace torch_mlir;
@@ -177,6 +181,12 @@ MlirBlock ModuleBuilder::getBodyBlock() {
   return mlirRegionGetFirstBlock(mlirOperationGetRegion(moduleOp, 0));
 }
 
+void ModuleBuilder::importFromString(std::string moduleStr) {
+    std::cout << moduleStr << std::endl;
+
+    //module = mlir::parseSourceString<MlirOperation>(moduleStr, mlirModuleGetContext(module));
+}
+
 void ModuleBuilder::bind(py::module &m) {
   py::class_<ModuleBuilder>(m, "ModuleBuilder")
       .def(py::init<py::object>(), py::arg("context") = py::none())
@@ -185,5 +195,6 @@ void ModuleBuilder::bind(py::module &m) {
       .def("import_function", &ModuleBuilder::importFunction)
       .def("import_module", &ModuleBuilder::importModule, py::arg("module"),
            py::arg("classAnnotator") = py::none(),
-           py::arg("importOptions") = py::none());
+           py::arg("importOptions") = py::none())
+      .def("import_string", &ModuleBuilder::importFromString);
 }

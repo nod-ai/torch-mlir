@@ -5,6 +5,9 @@
 
 from typing import Sequence, Union, List
 from enum import Enum
+import tempfile
+import subprocess
+import os
 
 import torch
 
@@ -47,6 +50,10 @@ class OutputType(Enum):
     # This output type consists of `mhlo` dialect ops. It can be thought of 
     # as taking the `TORCH` output type and lowering it to MHLO.
     MHLO = 4
+
+    # This output type consists of `onnx` dialect ops. Currently this simply
+    # involves rerouting the torch model to an onnx graph + onnx-mlir
+    ONNX = 5
 
     @staticmethod
     def get(spec: Union[str, "OutputType"]) -> "OutputType":
@@ -195,6 +202,35 @@ def compile(model: torch.nn.Module,
         else:
             assert isinstance(arg, torch.Tensor)
             arg_placeholders.append(TensorPlaceholder.like(arg))
+
+    if output_type == OutputType.ONNX:
+        temp_onnx = tempfile.NamedTemporaryFile(
+                suffix="_to_onnx.onnx", prefix="tmp_torch_"
+        )
+        torch.onnx.export(scripted, example_args, temp_onnx.name)
+
+        if (not os.environ.get('ONNX_MLIR_HOME', None)):
+            raise RuntimeError(
+                "Environment variable ONNX_MLIR_HOME is not set, please set it to the path to "
+                "the HOME directory for onnx-mlir. The HOME directory for onnx-mlir refers to "
+                "the parent folder containing the bin, lib, etc sub-folders in which ONNX-MLIR "
+                "executables and libraries can be found, typically `onnx-mlir/build/Debug`")
+        ONNX_MLIR = os.path.join(os.environ['ONNX_MLIR_HOME'], "bin", "onnx-mlir")
+        #ONNX_MLIR = "/home/quinn/nodwork/onnx-mlir/build/Debug/bin/onnx-mlir"
+        command_str = [ONNX_MLIR]
+        args = ["--EmitONNXBasic", "--printIR"]
+        command_str += args
+
+        command_str += [temp_onnx.name]
+
+        result = subprocess.run(command_str, stdout=subprocess.PIPE)
+        result_str = result.stdout.decode('utf-8')
+
+        mb = ModuleBuilder()
+        # Prints the model string from the module builder
+        mb.import_string(result_str)
+
+        return result_str
 
     class_annotator = ClassAnnotator()
     forward_annotation = [None]

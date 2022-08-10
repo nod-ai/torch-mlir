@@ -4,3 +4,6 @@
 [submodule "externals/mlir-hlo"]
 	path = externals/mlir-hlo
 	url = https://github.com/tensorflow/mlir-hlo.git
+[submodule "externals/onnx-mlir"]
+	path = externals/onnx-mlir
+	url = https://github.com/onnx/onnx-mlir.git
