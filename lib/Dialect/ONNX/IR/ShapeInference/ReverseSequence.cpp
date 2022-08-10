@@ -1,0 +1,31 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+//===---- ReverseSequence.cpp - Shape Inference for ReverseSequence Op ----===//
+//
+// This file implements shape inference for the ONNX ReverseSequence Operator.
+//
+//===----------------------------------------------------------------------===//
+
+#include "torch-mlir/Dialect/ONNX/IR/ShapeInference/ONNXShapeHelper.hpp"
+
+using namespace mlir;
+
+namespace onnx_mlir {
+
+LogicalResult ONNXReverseSequenceOpShapeHelper::computeShape(
+    ONNXReverseSequenceOpAdaptor operandAdaptor) {
+
+  // Get info about input data operand.
+  Value input = operandAdaptor.input();
+  MemRefBoundsIndexCapture inputBounds(input);
+  int64_t inputRank = inputBounds.getRank();
+
+  for (int64_t i = 0; i < inputRank; ++i)
+    dimsForOutput().emplace_back(inputBounds.getDim(i));
+
+  return success();
+}
+
+} // namespace onnx_mlir

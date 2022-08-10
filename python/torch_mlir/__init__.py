@@ -5,6 +5,9 @@
 
 from typing import Sequence, Union, List
 from enum import Enum
+import tempfile
+import subprocess
+import os
 
 import torch
 
@@ -47,6 +50,10 @@ class OutputType(Enum):
     # This output type consists of `mhlo` dialect ops. It can be thought of 
     # as taking the `TORCH` output type and lowering it to MHLO.
     MHLO = 4
+
+    # This output type consists of `onnx` dialect ops. Currently this simply
+    # involves rerouting the torch model to an onnx graph + onnx-mlir
+    ONNX = 5
 
     @staticmethod
     def get(spec: Union[str, "OutputType"]) -> "OutputType":
@@ -195,6 +202,21 @@ def compile(model: torch.nn.Module,
         else:
             assert isinstance(arg, torch.Tensor)
             arg_placeholders.append(TensorPlaceholder.like(arg))
+
+    if output_type == OutputType.ONNX:
+        temp_onnx = tempfile.NamedTemporaryFile(
+                suffix="_to_onnx.onnx", prefix="tmp_torch_"
+        )
+        torch.onnx.export(scripted, example_args, temp_onnx.name)
+
+        mb = ModuleBuilder()
+        mb.import_onnx_file(temp_onnx.name)
+
+        run_pipeline_with_repro_report(mb.module,
+                                       "onnx-simplification-pipeline",
+                                       "Passes to apply shape propogation to onnx mlir")
+
+        return mb.module
 
     class_annotator = ClassAnnotator()
     forward_annotation = [None]

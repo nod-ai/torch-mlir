@@ -25,6 +25,9 @@ add_mlir_library(TorchMLIRInitAll
 
   TorchMLIRConversionPasses
   TorchMLIRRefBackend
+  
+  TorchMLIRONNXPasses
+  TorchMLIRONNXDialect
 )
 
 torch_mlir_target_includes(TorchMLIRInitAll)

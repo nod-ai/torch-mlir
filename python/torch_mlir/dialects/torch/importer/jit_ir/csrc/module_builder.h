@@ -48,6 +48,10 @@ public:
                     py::object maybeClassAnnotator,
                     py::object maybeImportOptions);
 
+  // Imports a module from a string; used to import onnx-mlir output
+  void importFromString(std::string moduleStr);
+  void importOnnxFile(std::string model_fname);
+
 private:
   MlirBlock getBodyBlock();
 

@@ -20,16 +20,21 @@
 #include "torch-mlir/Dialect/TorchConversion/Transforms/Passes.h"
 #include "torch-mlir/RefBackend/Passes.h"
 
+#include "torch-mlir/Dialect/ONNX/IR/ONNXOps.hpp"
+#include "torch-mlir/Dialect/ONNX/Transforms/Passes.hpp"
+
 void mlir::torch::registerAllDialects(mlir::DialectRegistry &registry) {
   registry.insert<mlir::func::FuncDialect>();
   registry.insert<mlir::torch::Torch::TorchDialect>();
   registry.insert<mlir::torch::TorchConversion::TorchConversionDialect>();
   registry.insert<mlir::torch::TMTensor::TMTensorDialect>();
+  registry.insert<mlir::ONNXDialect>();
 }
 
 void mlir::torch::registerAllPasses() {
   mlir::torch::registerTorchPasses();
   mlir::torch::registerTorchConversionPasses();
+  onnx_mlir::registerONNXSimplificationPasses();
 
   mlir::torch::registerConversionPasses();
   mlir::torch::RefBackend::registerRefBackendPasses();

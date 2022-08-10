@@ -56,6 +56,17 @@ torch_mlir_add_llvm_external_project(
   TORCH_MLIR_DIALECTS
   ${CMAKE_CURRENT_SOURCE_DIR}/externals/llvm-external-projects/torch-mlir-dialects)
 
+
+add_definitions(
+  -DONNX_ML=1
+  -DONNX_NAMESPACE=onnx
+)
+set(LLVM_REQUIRES_EH ON)
+#set(LLVM_ENABLE_RTTI ON)
+add_subdirectory(externals/onnx)
+#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx
+#  ${CMAKE_CURRENT_BINARY_DIR}/onnx)
+
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   message(STATUS "Torch-MLIR out-of-tree build.")
   # Out-of-tree build
@@ -99,6 +110,7 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   add_subdirectory(externals/llvm-external-projects/torch-mlir-dialects)
 else()
   message(STATUS "Torch-MLIR in-tree build.")
+
   # In-tree build with LLVM_EXTERNAL_PROJECTS=torch-mlir
   if (TORCH_MLIR_ENABLE_MHLO)
     set(MLIR_PDLL_TABLEGEN_EXE mlir-pdll)
