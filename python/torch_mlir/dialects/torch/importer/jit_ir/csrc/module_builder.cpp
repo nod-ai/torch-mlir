@@ -7,8 +7,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include <iostream>
-
 #include "module_builder.h"
 
 #include "function_importer.h"
@@ -182,9 +180,14 @@ MlirBlock ModuleBuilder::getBodyBlock() {
 }
 
 void ModuleBuilder::importFromString(std::string moduleStr) {
-    std::cout << moduleStr << std::endl;
+    MlirStringRef moduleStringRef = mlirStringRefCreate(moduleStr.c_str(), moduleStr.size());
 
-    //module = mlir::parseSourceString<MlirOperation>(moduleStr, mlirModuleGetContext(module));
+    MlirContext context = mlirModuleGetContext(module);
+
+    // This is currently set in case the onnx dialect isn't loaded
+    mlirContextSetAllowUnregisteredDialects(context, true);
+
+    module = mlirModuleCreateParse(context, moduleStringRef);
 }
 
 void ModuleBuilder::bind(py::module &m) {

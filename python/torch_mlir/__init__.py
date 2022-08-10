@@ -227,10 +227,9 @@ def compile(model: torch.nn.Module,
         result_str = result.stdout.decode('utf-8')
 
         mb = ModuleBuilder()
-        # Prints the model string from the module builder
         mb.import_string(result_str)
 
-        return result_str
+        return mb.module
 
     class_annotator = ClassAnnotator()
     forward_annotation = [None]
