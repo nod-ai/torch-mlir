@@ -184,8 +184,8 @@ void ModuleBuilder::importFromString(std::string moduleStr) {
 
     MlirContext context = mlirModuleGetContext(module);
 
-    // This is currently set in case the onnx dialect isn't loaded
-    mlirContextSetAllowUnregisteredDialects(context, true);
+    // Here we can compile even if the dialect is unregistered
+    // mlirContextSetAllowUnregisteredDialects(context, true);
 
     module = mlirModuleCreateParse(context, moduleStringRef);
 }
