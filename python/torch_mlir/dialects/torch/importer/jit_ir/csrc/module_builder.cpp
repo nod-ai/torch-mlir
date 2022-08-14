@@ -184,10 +184,8 @@ void ModuleBuilder::importFromString(std::string moduleStr) {
 
     MlirContext context = mlirModuleGetContext(module);
 
-    // Here we can compile even if the dialect is unregistered
-    // mlirContextSetAllowUnregisteredDialects(context, true);
-
     module = mlirModuleCreateParse(context, moduleStringRef);
+    moduleObj = castMlirModuleToPythonObject(module);
 }
 
 void ModuleBuilder::bind(py::module &m) {
