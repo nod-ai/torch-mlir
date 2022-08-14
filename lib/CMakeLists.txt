@@ -32,6 +32,7 @@ add_mlir_library(TorchMLIRInitAll
   TorchMLIRRefBackend
 
   ${OMLibs}
+  TorchMLIRONNXPasses
 )
 
 torch_mlir_target_includes(TorchMLIRInitAll)
