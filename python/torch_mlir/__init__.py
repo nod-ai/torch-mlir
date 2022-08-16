@@ -218,7 +218,7 @@ def compile(model: torch.nn.Module,
         ONNX_MLIR = os.path.join(os.environ['ONNX_MLIR_HOME'], "bin", "onnx-mlir")
         #ONNX_MLIR = "/home/quinn/nodwork/onnx-mlir/build/Debug/bin/onnx-mlir"
         command_str = [ONNX_MLIR]
-        args = ["--EmitONNXBasic", "--printIR"]
+        args = ["--printIR"]
         command_str += args
 
         command_str += [temp_onnx.name]

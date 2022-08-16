@@ -135,16 +135,14 @@ endif()
 
 if (TORCH_MLIR_ENABLE_ONNX)
   set(ONNX_BUILD_EMBEDDED ON)
-  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir
+  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir-exporter
     ${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir)
-  include_directories(${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir/src)
-  include_directories(${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir/src)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir/include)
-  include_directories(${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir/include)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir/third_party)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/onnx-mlir/third_party)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir-exporter)
+  include_directories(${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir-exporter)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir-exporter/src)
+  include_directories(${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir-exporter/src)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir-exporter/include)
+  include_directories(${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir-exporter/include)
 endif()
 
 set(TORCH_MLIR_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
