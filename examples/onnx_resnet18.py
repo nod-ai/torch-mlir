@@ -13,8 +13,6 @@ import torchvision.models as models
 from torchvision import transforms
 
 import torch_mlir
-from torch_mlir_e2e_test.linalg_on_tensors_backends import refbackend
-
 
 def load_and_preprocess_image(url: str):
     headers = {
@@ -51,5 +49,23 @@ labels = load_labels()
 
 resnet18 = models.resnet18(pretrained=True)
 resnet18.train(False)
+
 module = torch_mlir.compile(resnet18, torch.ones(1, 3, 224, 224), output_type="onnx")
-print(module)
+
+import subprocess
+import tempfile
+import warnings
+
+temp_module = tempfile.NamedTemporaryFile(
+        mode="wt", suffix="_to_onnx.mlir", prefix="tmp_torch_"
+)
+temp_module.write(str(module.operation.get_asm()))
+
+command = ['torch-mlir-opt']
+command += [temp_module.name, '--mlir-elide-elementsattrs-if-larger=32']
+
+try:
+    subprocess.run(command)
+except FileNotFoundError as e:
+    module.dump()
+    warnings.warn("Couldn't find 'torch-mlir-opt' in the PATH so the module was dumped. Please add it to the path to elide large constants.")

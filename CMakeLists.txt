@@ -36,7 +36,7 @@ macro(torch_mlir_add_llvm_external_project name identifier location)
   set(LLVM_EXTERNAL_PROJECTS ${LLVM_EXTERNAL_PROJECTS} CACHE STRING "" FORCE)
 endmacro()
 
-option(TORCH_MLIR_ENABLE_MHLO "Add mhlo dialect" OFF)
+option(TORCH_MLIR_ENABLE_MHLO "Add mhlo dialect" ON)
 if(TORCH_MLIR_ENABLE_MHLO)
   add_definitions(-DTORCH_MLIR_ENABLE_MHLO)
   # The i64 calculation is much slower than i32 on some devices, such as Nvidia GPU.
@@ -136,13 +136,7 @@ endif()
 if (TORCH_MLIR_ENABLE_ONNX)
   set(ONNX_BUILD_EMBEDDED ON)
   add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir-exporter
-    ${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir-exporter)
-  include_directories(${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir-exporter)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir-exporter/src)
-  include_directories(${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir-exporter/src)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir-exporter/include)
-  include_directories(${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir-exporter/include)
+    ${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir-exporter)
 endif()
 
 set(TORCH_MLIR_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")

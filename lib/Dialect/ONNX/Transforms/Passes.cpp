@@ -9,22 +9,8 @@
 
 #include "torch-mlir/Dialect/ONNX/Transforms/Passes.h"
 #include "torch-mlir/Dialect/Torch/Transforms/Passes.h"
-
-#include "mlir/Conversion/Passes.h"
-//#include "mlir/Conversion/SCFToControlFlow/SCFToControlFlow.h"
-//#include "mlir/Conversion/VectorToLLVM/ConvertVectorToLLVM.h"
-//#include "mlir/Conversion/VectorToSCF/VectorToSCF.h"
-#include "mlir/Dialect/Bufferization/Transforms/Passes.h"
-#include "mlir/Dialect/Func/Transforms/Passes.h"
-#include "mlir/Pass/Pass.h"
 #include "mlir/Pass/PassManager.h"
 #include "mlir/Transforms/Passes.h"
-//#include "mlir/Target/LLVMIR/Dialect/LLVMIR/LLVMToLLVMIRTranslation.h"
-#include "mlir/Transforms/Passes.h"
-
-//#include "src/Compiler/CompilerOptions.hpp"
-//#include "src/Compiler/CompilerPasses.hpp"
-//#include "src/Conversion/KrnlToLLVM/ConvertKrnlToLLVM.hpp"
 #include "src/Dialect/ONNX/ONNXDialect.hpp"
 #include "src/Pass/Passes.hpp"
 
@@ -51,24 +37,5 @@ void mlir::torch::registerONNXSimplificationPasses() {
 void onnx::createONNXSimplificationPasses(
     OpPassManager &pm, const Torch::TorchLoweringPipelineOptions &options) {
   pm.addNestedPass<func::FuncOp>(onnx_mlir::createDecomposeONNXToONNXPass());
-  pm.addPass(onnx_mlir::createShapeInferencePass());
-  pm.addPass(mlir::createCanonicalizerPass());
-  pm.addPass(onnx_mlir::createShapeInferencePass());
-  pm.addNestedPass<func::FuncOp>(onnx_mlir::createConstPropONNXToONNXPass());
-
-  //if (onnxOpTransformThreshold > 0) {
-  //  pm.addPass(onnx_mlir::createONNXOpTransformPass(
-  //      onnxOpTransformThreshold, onnxOpTransformReport));
-  //} else {
-  //  for (int i = 0; i < repeatOnnxTransform; i++) {
-  //    pm.addPass(mlir::createCanonicalizerPass());
-  //    pm.addPass(onnx_mlir::createShapeInferencePass());
-  //    pm.addNestedPass<func::FuncOp>(
-  //        onnx_mlir::createConstPropONNXToONNXPass());
-  //  }
-  //}
-
-  // Clean dead code.
-  //pm.addPass(mlir::createSymbolDCEPass());
-
+  pm.addPass(mlir::createSymbolDCEPass());
 }
