@@ -134,7 +134,6 @@ if (TORCH_MLIR_ENABLE_MHLO)
 endif()
 
 if (TORCH_MLIR_ENABLE_ONNX)
-  set(ONNX_BUILD_EMBEDDED ON)
   add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir-exporter
     ${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir-exporter)
 endif()

@@ -1,3 +1,5 @@
 add_subdirectory(Torch)
 add_subdirectory(TorchConversion)
-add_subdirectory(ONNX)
+if(TORCH_MLIR_ENABLE_ONNX)
+  add_subdirectory(ONNX)
+endif()

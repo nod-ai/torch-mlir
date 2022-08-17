@@ -3,18 +3,7 @@ add_subdirectory(Conversion)
 add_subdirectory(Dialect)
 add_subdirectory(RefBackend)
 
-get_property(OMLibs GLOBAL PROPERTY ONNX_MLIR_LIBS)
-
-add_mlir_library(TorchMLIRInitAll
-  InitAll.cpp
-
-  DEPENDS
-  ${OMLibs}
-
-  LINK_COMPONENTS
-  Core
-
-  LINK_LIBS PUBLIC
+set(linked_libs
   MLIRFuncDialect
   MLIRIR
   MLIRSupport
@@ -29,10 +18,26 @@ add_mlir_library(TorchMLIRInitAll
   TorchMLIRTMTensorDialect
 
   TorchMLIRConversionPasses
-  TorchMLIRRefBackend
+  TorchMLIRRefBackend)
 
+if(TORCH_MLIR_ENABLE_ONNX)
+  get_property(OMLibs GLOBAL PROPERTY ONNX_MLIR_LIBS)
+  list(APPEND linked_libs
+    ${OMLibs}
+    TorchMLIRONNXPasses)
+endif()
+
+add_mlir_library(TorchMLIRInitAll
+  InitAll.cpp
+
+  DEPENDS
   ${OMLibs}
-  TorchMLIRONNXPasses
+
+  LINK_COMPONENTS
+  Core
+
+  LINK_LIBS PUBLIC
+  ${linked_libs}
 )
 
 torch_mlir_target_includes(TorchMLIRInitAll)
