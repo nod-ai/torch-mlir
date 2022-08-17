@@ -7,3 +7,6 @@
 [submodule "externals/onnx-mlir-exporter"]
 	path = externals/onnx-mlir-exporter
 	url = https://github.com/nod-ai/onnx-mlir-exporter
+[submodule "externals/onnx"]
+	path = externals/onnx
+	url = https://github.com/onnx/onnx
