@@ -23,13 +23,13 @@ namespace torch {
 namespace onnx {
 
 /// Creates a pipeline that simplifies onnx dialect
-void createONNXSimplificationPasses(
-    OpPassManager &pm,
-    const torch::Torch::TorchLoweringPipelineOptions &options);
+//void createONNXSimplificationPasses(
+//    OpPassManager &pm,
+//    const torch::Torch::TorchLoweringPipelineOptions &options);
 } // namespace onnx
 
 /// Registers ONNX simplification pipeline
-void registerONNXSimplificationPasses();
+//void registerONNXSimplificationPasses();
 
 } // namespace torch
 } // namespace mlir

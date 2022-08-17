@@ -49,17 +49,17 @@ if(TORCH_MLIR_ENABLE_MHLO)
   endif()
 endif()
 
-option(TORCH_MLIR_ENABLE_ONNX "Add onnx dialect" OFF)
-if(TORCH_MLIR_ENABLE_ONNX)
-  add_definitions(-DTORCH_MLIR_ENABLE_ONNX)
-endif()
-
 option(TORCH_MLIR_ENABLE_LTC "Enables LTC backend" ON)
 
 torch_mlir_add_llvm_external_project(
   torch-mlir-dialects
   TORCH_MLIR_DIALECTS
   ${CMAKE_CURRENT_SOURCE_DIR}/externals/llvm-external-projects/torch-mlir-dialects)
+
+
+add_subdirectory(externals/onnx)
+#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx
+#  ${CMAKE_CURRENT_BINARY_DIR}/onnx)
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   message(STATUS "Torch-MLIR out-of-tree build.")
@@ -105,10 +105,6 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
 else()
   message(STATUS "Torch-MLIR in-tree build.")
 
-  if(TORCH_MLIR_ENABLE_ONNX)
-    message(FATAL_ERROR "ONNX-MLIR only supported for out-of-tree builds")
-  endif()
-
   # In-tree build with LLVM_EXTERNAL_PROJECTS=torch-mlir
   if (TORCH_MLIR_ENABLE_MHLO)
     set(MLIR_PDLL_TABLEGEN_EXE mlir-pdll)
@@ -131,11 +127,6 @@ if (TORCH_MLIR_ENABLE_MHLO)
     EXCLUDE_FROM_ALL)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/externals/mlir-hlo/include)
   include_directories(${CMAKE_CURRENT_BINARY_DIR}/mlir-hlo/include)
-endif()
-
-if (TORCH_MLIR_ENABLE_ONNX)
-  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx-mlir-exporter
-    ${CMAKE_CURRENT_BINARY_DIR}/onnx-mlir-exporter)
 endif()
 
 set(TORCH_MLIR_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")

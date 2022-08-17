@@ -18,20 +18,14 @@ set(linked_libs
   TorchMLIRTMTensorDialect
 
   TorchMLIRConversionPasses
-  TorchMLIRRefBackend)
-
-if(TORCH_MLIR_ENABLE_ONNX)
-  get_property(OMLibs GLOBAL PROPERTY ONNX_MLIR_LIBS)
-  list(APPEND linked_libs
-    ${OMLibs}
-    TorchMLIRONNXPasses)
-endif()
+  TorchMLIRRefBackend
+  
+  TorchMLIRONNXPasses
+  TorchMLIRONNXDialect
+  TorchMLIRONNXBuilder)
 
 add_mlir_library(TorchMLIRInitAll
   InitAll.cpp
-
-  DEPENDS
-  ${OMLibs}
 
   LINK_COMPONENTS
   Core

@@ -11,8 +11,8 @@
 #include "torch-mlir/Dialect/Torch/Transforms/Passes.h"
 #include "mlir/Pass/PassManager.h"
 #include "mlir/Transforms/Passes.h"
-#include "src/Dialect/ONNX/ONNXDialect.hpp"
-#include "src/Pass/Passes.hpp"
+//#include "src/Dialect/ONNX/ONNXDialect.hpp"
+//#include "src/Pass/Passes.hpp"
 
 using namespace mlir;
 using namespace mlir::torch;
@@ -26,16 +26,16 @@ namespace {
 #include "torch-mlir/Dialect/ONNX/Transforms/Passes.h.inc"
 } // end namespace
 
-void mlir::torch::registerONNXSimplificationPasses() {
-  ::registerPasses();
-  mlir::PassPipelineRegistration<Torch::TorchLoweringPipelineOptions>(
-      "onnx-simplification-pipeline",
-      "Pipeline simplifying ONNX dialect.",
-      onnx::createONNXSimplificationPasses);
-}
-
-void onnx::createONNXSimplificationPasses(
-    OpPassManager &pm, const Torch::TorchLoweringPipelineOptions &options) {
-  pm.addNestedPass<func::FuncOp>(onnx_mlir::createDecomposeONNXToONNXPass());
-  pm.addPass(mlir::createSymbolDCEPass());
-}
+//void mlir::torch::registerONNXSimplificationPasses() {
+//  ::registerPasses();
+//  mlir::PassPipelineRegistration<Torch::TorchLoweringPipelineOptions>(
+//      "onnx-simplification-pipeline",
+//      "Pipeline simplifying ONNX dialect.",
+//      onnx::createONNXSimplificationPasses);
+//}
+//
+//void onnx::createONNXSimplificationPasses(
+//    OpPassManager &pm, const Torch::TorchLoweringPipelineOptions &options) {
+//  pm.addNestedPass<func::FuncOp>(onnx_mlir::createDecomposeONNXToONNXPass());
+//  pm.addPass(mlir::createSymbolDCEPass());
+//}

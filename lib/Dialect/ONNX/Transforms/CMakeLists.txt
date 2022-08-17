@@ -1,5 +1,3 @@
-get_property(OMLibs GLOBAL PROPERTY ONNX_MLIR_LIBS)
-
 add_mlir_library(TorchMLIRONNXPasses
   Passes.cpp
 
@@ -8,7 +6,6 @@ add_mlir_library(TorchMLIRONNXPasses
 
   DEPENDS
   TorchMLIRONNXPassIncGen
-  ${OMLibs}
 
   LINK_COMPONENTS
   Core
@@ -17,5 +14,4 @@ add_mlir_library(TorchMLIRONNXPasses
   MLIRIR
   MLIRPass
   MLIRFuncTransforms
-  ${OMLibs}
 )

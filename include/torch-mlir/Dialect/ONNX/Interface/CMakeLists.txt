@@ -1,0 +1,10 @@
+function(add_onnx_mlir_interface interface)
+  set(LLVM_TARGET_DEFINITIONS ${interface}.td)
+  mlir_tablegen(${interface}.hpp.inc -gen-op-interface-decls)
+  mlir_tablegen(${interface}.cpp.inc -gen-op-interface-defs)
+  add_public_tablegen_target(MLIRONNX${interface}IncGen)
+endfunction()
+
+add_onnx_mlir_interface(ShapeInferenceOpInterface)
+add_onnx_mlir_interface(ResultTypeInferenceOpInterface)
+add_onnx_mlir_interface(HasOnnxSubgraphOpInterface)
