@@ -21,8 +21,7 @@ set(linked_libs
   TorchMLIRRefBackend
   
   TorchMLIRONNXPasses
-  TorchMLIRONNXDialect
-  TorchMLIRONNXBuilder)
+  TorchMLIRONNXDialect)
 
 add_mlir_library(TorchMLIRInitAll
   InitAll.cpp

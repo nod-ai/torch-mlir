@@ -209,29 +209,12 @@ def compile(model: torch.nn.Module,
         )
         torch.onnx.export(scripted, example_args, temp_onnx.name)
 
-        if (not os.environ.get('ONNX_MLIR_HOME', None)):
-            raise RuntimeError(
-                "Environment variable ONNX_MLIR_HOME is not set, please set it to the path to "
-                "the HOME directory for onnx-mlir. The HOME directory for onnx-mlir refers to "
-                "the parent folder containing the bin, lib, etc sub-folders in which ONNX-MLIR "
-                "executables and libraries can be found, typically `onnx-mlir/build/Debug`")
-        ONNX_MLIR = os.path.join(os.environ['ONNX_MLIR_HOME'], "bin", "onnx-mlir")
-        #ONNX_MLIR = "/home/quinn/nodwork/onnx-mlir/build/Debug/bin/onnx-mlir"
-        command_str = [ONNX_MLIR]
-        args = ["--printIR"]
-        command_str += args
-
-        command_str += [temp_onnx.name]
-
-        result = subprocess.run(command_str, stdout=subprocess.PIPE)
-        result_str = result.stdout.decode('utf-8')
-
         mb = ModuleBuilder()
-        mb.import_string(result_str)
+        mb.import_onnx_file(temp_onnx.name)
 
-        run_pipeline_with_repro_report(mb.module,
-                                       "onnx-simplification-pipeline",
-                                       "Passes to apply shape propogation to onnx mlir")
+        #run_pipeline_with_repro_report(mb.module,
+        #                               "onnx-simplification-pipeline",
+        #                               "Passes to apply shape propogation to onnx mlir")
 
         return mb.module
 

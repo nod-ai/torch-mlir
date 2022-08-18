@@ -18,8 +18,11 @@
 #include "mlir-c/BuiltinTypes.h"
 #include "mlir-c/Diagnostics.h"
 #include "torch-mlir-c/Registration.h"
+#include "torch-mlir-c/ONNXImporter.h"
 
 #include "llvm/Support/SourceMgr.h"
+
+#include <iostream>
 
 namespace py = pybind11;
 using namespace torch_mlir;
@@ -181,10 +184,13 @@ MlirBlock ModuleBuilder::getBodyBlock() {
 
 void ModuleBuilder::importFromString(std::string moduleStr) {
     MlirStringRef moduleStringRef = mlirStringRefCreate(moduleStr.c_str(), moduleStr.size());
+    module = mlirModuleCreateParse(mlirModuleGetContext(module), moduleStringRef);
+    moduleObj = castMlirModuleToPythonObject(module);
+}
 
-    MlirContext context = mlirModuleGetContext(module);
-
-    module = mlirModuleCreateParse(context, moduleStringRef);
+void ModuleBuilder::importOnnxFile(std::string model_fname) {
+    MlirStringRef moduleStringRef = mlirStringRefCreate(model_fname.c_str(), model_fname.size());
+    module = torchMlirImportONNX(mlirModuleGetContext(module), moduleStringRef);
     moduleObj = castMlirModuleToPythonObject(module);
 }
 
@@ -197,5 +203,6 @@ void ModuleBuilder::bind(py::module &m) {
       .def("import_module", &ModuleBuilder::importModule, py::arg("module"),
            py::arg("classAnnotator") = py::none(),
            py::arg("importOptions") = py::none())
-      .def("import_string", &ModuleBuilder::importFromString);
+      .def("import_string", &ModuleBuilder::importFromString)
+      .def("import_onnx_file", &ModuleBuilder::importOnnxFile);
 }
