@@ -14,6 +14,6 @@ add_mlir_library(TorchMLIRONNXInterface
   MLIRONNXResultTypeInferenceOpInterfaceIncGen
   MLIRONNXShapeInferenceOpInterfaceIncGen
 
-  LINK_LIBS PUBLIC
-  LLVMSupport
+  LINK_COMPONENTS
+  Support
 )

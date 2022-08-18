@@ -3,7 +3,13 @@ add_subdirectory(Conversion)
 add_subdirectory(Dialect)
 add_subdirectory(RefBackend)
 
-set(linked_libs
+add_mlir_library(TorchMLIRInitAll
+  InitAll.cpp
+
+  LINK_COMPONENTS
+  Core
+
+  LINK_LIBS PUBLIC
   MLIRFuncDialect
   MLIRIR
   MLIRSupport
@@ -21,16 +27,7 @@ set(linked_libs
   TorchMLIRRefBackend
   
   TorchMLIRONNXPasses
-  TorchMLIRONNXDialect)
-
-add_mlir_library(TorchMLIRInitAll
-  InitAll.cpp
-
-  LINK_COMPONENTS
-  Core
-
-  LINK_LIBS PUBLIC
-  ${linked_libs}
+  TorchMLIRONNXDialect
 )
 
 torch_mlir_target_includes(TorchMLIRInitAll)

@@ -62,6 +62,7 @@ add_definitions(
   -DONNX_NAMESPACE=onnx
 )
 set(LLVM_REQUIRES_EH ON)
+#set(LLVM_ENABLE_RTTI ON)
 add_subdirectory(externals/onnx)
 #add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx
 #  ${CMAKE_CURRENT_BINARY_DIR}/onnx)
