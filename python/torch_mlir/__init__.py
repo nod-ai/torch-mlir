@@ -212,9 +212,9 @@ def compile(model: torch.nn.Module,
         mb = ModuleBuilder()
         mb.import_onnx_file(temp_onnx.name)
 
-        #run_pipeline_with_repro_report(mb.module,
-        #                               "onnx-simplification-pipeline",
-        #                               "Passes to apply shape propogation to onnx mlir")
+        run_pipeline_with_repro_report(mb.module,
+                                       "onnx-simplification-pipeline",
+                                       "Passes to apply shape propogation to onnx mlir")
 
         return mb.module
 
