@@ -36,8 +36,8 @@
 
 #include "onnx/onnx_pb.h"
 #include "torch-mlir/Dialect/ONNX/Builder/SymbolTable.hpp"
-#include "torch-mlir/Dialect/ONNX/Dialect/ONNX/ONNXOps.hpp"
-#include "torch-mlir/Dialect/ONNX/Dialect/ONNX/ONNXOpsHelper.hpp"
+#include "torch-mlir/Dialect/ONNX/IR/ONNXOps.hpp"
+#include "torch-mlir/Dialect/ONNX/IR/ONNXOpsHelper.hpp"
 
 namespace onnx_mlir {
 

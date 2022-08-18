@@ -13,7 +13,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "torch-mlir/Dialect/ONNX/Utils/ONNXShapeHelper.hpp"
+#include "torch-mlir/Dialect/ONNX/IR/ShapeInference/ONNXShapeHelper.hpp"
 #include "torch-mlir/Dialect/ONNX/IR/ONNXOpsHelper.hpp"
 
 #include <algorithm>

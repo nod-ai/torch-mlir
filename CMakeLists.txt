@@ -57,6 +57,11 @@ torch_mlir_add_llvm_external_project(
   ${CMAKE_CURRENT_SOURCE_DIR}/externals/llvm-external-projects/torch-mlir-dialects)
 
 
+add_definitions(
+  -DONNX_ML=1
+  -DONNX_NAMESPACE=onnx
+)
+set(LLVM_REQUIRES_EH ON)
 add_subdirectory(externals/onnx)
 #add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/externals/onnx
 #  ${CMAKE_CURRENT_BINARY_DIR}/onnx)

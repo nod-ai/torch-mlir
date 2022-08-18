@@ -11,7 +11,7 @@ add_public_tablegen_target(MLIRONNXIncGen)
 add_dependencies(mlir-headers MLIRONNXIncGen)
 
 set(LLVM_TARGET_DEFINITIONS Rewrite.td)
-mlir_tablegen(rewriter.inc -gen-rewriters)
+mlir_tablegen(ONNXRewrite.inc -gen-rewriters)
 add_public_tablegen_target(MLIRONNXRewriteIncGen)
 
 #add_mlir_doc(ONNXDialect ONNXDialect ONNX/ -gen-dialect-doc)

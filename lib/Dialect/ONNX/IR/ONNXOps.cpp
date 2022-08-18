@@ -29,8 +29,8 @@
 #include "torch-mlir/Dialect/ONNX/IR/ONNXEinsumOpHelper.hpp"
 #include "torch-mlir/Dialect/ONNX/IR/ONNXOps.hpp"
 #include "torch-mlir/Dialect/ONNX/IR/ONNXOpsHelper.hpp"
-#include "torch-mlir/Dialect/Utils/ONNXShapeHelper.hpp"
-#include "torch-mlir/Dialect/Support/Diagnostic.hpp"
+#include "torch-mlir/Dialect/ONNX/IR/ShapeInference/ONNXShapeHelper.hpp"
+#include "torch-mlir/Dialect/ONNX/Support/Diagnostic.hpp"
 
 #include <algorithm>
 #include <string>
