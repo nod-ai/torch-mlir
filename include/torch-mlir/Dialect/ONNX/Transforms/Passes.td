@@ -12,4 +12,14 @@
 
 include "mlir/Pass/PassBase.td"
 
+def EraseONNXEntryPoint
+    : Pass<"onnx-erase-entry-point", "ModuleOp"> {
+  let summary = "Erase the `onxx.EntryPoint` op.";
+  let constructor =
+    "mlir::onnx::createEraseONNXEntryPointPass()";
+  let description = [{
+    The onnx entry point is currently being removed.
+  }];
+}
+
 #endif // TORCHMLIR_ONNX_PASSES

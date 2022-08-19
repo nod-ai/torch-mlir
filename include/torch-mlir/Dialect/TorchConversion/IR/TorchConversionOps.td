@@ -25,6 +25,45 @@ class TorchConversion_Op<string mnemonic, list<Trait> traits = []>
 // Conversions to backend types.
 //===----------------------------------------------------------------------===//
 
+def TorchConversion_ToNonValueTensorOp : TorchConversion_Op<"to_nonvalue_tensor", [
+    DeclareOpInterfaceMethods<InferTypeOpInterface>
+  ]> {
+  let summary = "Convert a `tensor` to a `!torch.tensor`";
+  let description = [{
+    This op only operates on NonValueTensorType, to avoid conflating conversions
+    between value-semantic and non-value-semantic types.
+  }];
+  let arguments = (ins
+    AnyTensor:$operand
+  );
+  let results = (outs
+    Torch_NonValueTensorType:$result
+  );
+  let assemblyFormat = [{
+    $operand attr-dict `:` qualified(type($operand)) `->` qualified(type($result))
+  }];
+  let hasVerifier = 1;
+}
+
+def TorchConversion_FromNonValueTensorOp : TorchConversion_Op<"from_nonvalue_tensor">
+ {
+  let summary = "Convert a `!torch.tensor` to a `tensor`";
+  let description = [{
+    This op only operates on NonValueTensorType, to avoid conflating conversions
+    between value-semantic and non-value-semantic types.
+  }];
+  let arguments = (ins
+    Torch_NonValueTensorType:$operand
+  );
+  let results = (outs
+    AnyTensor:$result
+  );
+  let assemblyFormat = [{
+    $operand attr-dict `:` qualified(type($operand)) `->` qualified(type($result))
+  }];
+  let hasVerifier = 1;
+}
+
 def TorchConversion_ToBuiltinTensorOp : TorchConversion_Op<"to_builtin_tensor", [
     DeclareOpInterfaceMethods<InferTypeOpInterface>
   ]> {

@@ -125,6 +125,15 @@ def ConvertTorchToTMTensor : Pass<"convert-torch-to-tmtensor", "func::FuncOp"> {
   let constructor = "mlir::torch::createConvertTorchToTMTensorPass()";
 }
 
+def ConvertONNXToTorch : Pass<"convert-onnx-to-torch", "func::FuncOp"> {
+  let summary = "Convert frontend ONNX dialect to Torch Ops";
+  let description = [{
+    Convert ONNX dialect to Torch. ONNX dialect comes from the ONNX-MLIR
+    frontend ONNX dialect.
+  }];
+  let constructor = "mlir::torch::createConvertONNXToTorchPass()";
+}
+
 #ifdef TORCH_MLIR_ENABLE_MHLO
 def ConvertTorchToMhlo : Pass<"convert-torch-to-mhlo", "func::FuncOp"> {
   let summary = "Convert Torch ops to MHLO ops";

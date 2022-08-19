@@ -34,7 +34,7 @@ void mlir::torch::registerAllDialects(mlir::DialectRegistry &registry) {
 void mlir::torch::registerAllPasses() {
   mlir::torch::registerTorchPasses();
   mlir::torch::registerTorchConversionPasses();
-  onnx_mlir::registerONNXSimplificationPasses();
+  onnx_mlir::registerONNXToTorchPasses();
 
   mlir::torch::registerConversionPasses();
   mlir::torch::RefBackend::registerRefBackendPasses();

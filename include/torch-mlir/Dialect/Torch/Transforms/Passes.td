@@ -215,6 +215,14 @@ def RefinePublicReturn : Pass<"torch-refine-public-return", "ModuleOp"> {
   }];
 }
 
+def RefineFuncValueSemantics : Pass<"torch-refine-func-value-semantics", "ModuleOp"> {
+  let summary = "Refine function value semantics";
+  let constructor = "mlir::torch::Torch::createRefineFuncValueSemanticsPass()";
+  let description = [{
+    Changes public functions with no uses to use value semantics for onnx.
+  }];
+}
+
 def DecomposeComplexOps : Pass<"torch-decompose-complex-ops", "func::FuncOp"> {
   let summary = "Decompose complicated torch operations";
   let constructor = "mlir::torch::Torch::createDecomposeComplexOpsPass()";

@@ -164,6 +164,8 @@ def Torch_NonValueTensorType : AnyTorchTensorType<"NonValueTensor", "tensor"> {
     ValueTensorType getWithValueSemantics() const;
     // Get the !torch.tensor type with the least static information.
     static NonValueTensorType getWithLeastStaticInformation(MLIRContext *context);
+    // Get the !torch.tensor type from a builtin tensor
+    static NonValueTensorType getFromBuiltinTensor(TensorType type);
   }];
 }
 

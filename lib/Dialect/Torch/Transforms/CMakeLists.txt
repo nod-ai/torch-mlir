@@ -10,6 +10,7 @@ add_mlir_library(TorchMLIRTorchPasses
   PrepareForGlobalizeObjectGraph.cpp
   ReduceOpVariants.cpp
   RefinePublicReturn.cpp
+  RefineFuncValueSemantics.cpp
   RefineTypes.cpp
   ReifyShapeCalculations.cpp
   ShapeLibrary.cpp

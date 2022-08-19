@@ -315,6 +315,14 @@ NonValueTensorType::getWithLeastStaticInformation(MLIRContext *context) {
                                  /*optionalDtype=*/Type());
 }
 
+NonValueTensorType NonValueTensorType::getFromBuiltinTensor(TensorType type) {
+  auto context = type.getContext();
+  if (type.isa<RankedTensorType>()) {
+    return NonValueTensorType::get(context, type.getShape(), type.getElementType());
+  }
+  return NonValueTensorType::get(context, None, type.getElementType());
+}
+
 LogicalResult
 NonValueTensorType::verify(function_ref<InFlightDiagnostic()> emitError,
                            Optional<ArrayRef<int64_t>> optionalSizes,

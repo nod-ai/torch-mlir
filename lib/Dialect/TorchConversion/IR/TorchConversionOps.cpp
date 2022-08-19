@@ -29,6 +29,49 @@ static bool haveSameSizeAndElementType(TensorType lhs, TensorType rhs) {
   return sameElementType && sameSize;
 }
 
+
+//===----------------------------------------------------------------------===//
+// ToNonValueTensorOp
+//===----------------------------------------------------------------------===//
+
+LogicalResult ToNonValueTensorOp::verify() {
+  auto resultType =
+      getResult().getType().cast<Torch::NonValueTensorType>().getWithValueSemantics().toBuiltinTensor();
+  auto operandType = getOperand().getType().cast<TensorType>();
+  if (!haveSameSizeAndElementType(resultType, operandType)) {
+    return emitError()
+           << "operand and result must have the same size and dtype";
+  }
+  return success();
+}
+
+LogicalResult ToNonValueTensorOp::inferReturnTypes(
+    MLIRContext *context, Optional<Location> location, ValueRange operands,
+    DictionaryAttr attributes, RegionRange regions,
+    SmallVectorImpl<Type> &inferredReturnTypes) {
+  auto resultType =
+      Torch::NonValueTensorType::getFromBuiltinTensor(operands[0].getType().cast<TensorType>());
+  if (!resultType)
+    return failure();
+  inferredReturnTypes.push_back(resultType);
+  return success();
+}
+
+//===----------------------------------------------------------------------===//
+// FromNonValueTensorOp
+//===----------------------------------------------------------------------===//
+
+LogicalResult FromNonValueTensorOp::verify() {
+  auto resultType = getResult().getType().cast<TensorType>();
+  auto operandType =
+      getOperand().getType().cast<Torch::NonValueTensorType>().getWithValueSemantics().toBuiltinTensor();
+  if (!haveSameSizeAndElementType(resultType, operandType)) {
+    return emitError()
+           << "operand and result must have the same size and dtype";
+  }
+  return success();
+}
+
 //===----------------------------------------------------------------------===//
 // ToBuiltinTensorOp
 //===----------------------------------------------------------------------===//

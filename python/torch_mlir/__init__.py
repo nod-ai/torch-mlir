@@ -211,10 +211,19 @@ def compile(model: torch.nn.Module,
 
         mb = ModuleBuilder()
         mb.import_onnx_file(temp_onnx.name)
+        print(mb.module)
 
         run_pipeline_with_repro_report(mb.module,
-                                       "onnx-simplification-pipeline",
-                                       "Passes to apply shape propogation to onnx mlir")
+                                       "onnx-to-torch-pipeline",
+                                       "Passes to convert onnx mlir to torch")
+
+        run_pipeline_with_repro_report(mb.module,
+                                       "torch-function-to-torch-backend-pipeline",
+                                       "Target Torch Backend IR")
+        run_pipeline_with_repro_report(
+            mb.module,
+            "torch-backend-to-linalg-on-tensors-backend-pipeline",
+            "Lowering Torch Backend IR -> Linalg-on-Tensors Backend IR")
 
         return mb.module
 

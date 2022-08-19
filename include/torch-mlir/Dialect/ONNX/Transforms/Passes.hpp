@@ -16,10 +16,6 @@
 
 #include <memory>
 
-//namespace mlir {
-//class Pass;
-//}
-
 using namespace mlir;
 
 namespace onnx_mlir {
@@ -27,13 +23,21 @@ namespace onnx_mlir {
 /// Pass for rewriting inside frontend dialect
 std::unique_ptr<mlir::Pass> createDecomposeONNXToONNXPass();
 
-/// Creates a pipeline that simplifies onnx dialect
-void createONNXSimplificationPasses(
+/// Creates a pipeline that converts the onnx dialect
+void createONNXToTorchPasses(
     OpPassManager &pm,
     const torch::Torch::TorchLoweringPipelineOptions &options);
 
-/// Registers ONNX simplification pipeline
-void registerONNXSimplificationPasses();
+/// Registers ONNX to Torch pipeline
+void registerONNXToTorchPasses();
 } // namespace onnx_mlir
+
+namespace mlir {
+class ModuleOp;
+
+namespace onnx {
+std::unique_ptr<OperationPass<ModuleOp>> createEraseONNXEntryPointPass();
+} // namespace onnx
+} // namespace mlir
 
 #endif // TORCHMLIR_DIALECT_ONNX_TRANSFORMS_PASSES_H

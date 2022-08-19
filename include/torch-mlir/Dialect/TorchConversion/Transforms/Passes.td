@@ -42,11 +42,31 @@ def FuncBackendTypeConversion : Pass<"torch-func-backend-type-conversion", "Modu
   }];
 }
 
+def FuncFrontendTypeConversion : Pass<"torch-func-frontend-type-conversion", "ModuleOp"> {
+  let summary = "Convert functions to operate on torch tensors";
+  let constructor = "mlir::torch::TorchConversion::createFuncFrontendTypeConversionPass()";
+  let description = [{
+    Partial type conversion pass analogous in scope to the upstream
+    `func-bufferize` pass. See details there.
+  }];
+}
+
 def FinalizingBackendTypeConversion
     : Pass<"torch-finalizing-backend-type-conversion", "func::FuncOp"> {
   let summary = "Finalizes a partial conversion to builtin tensors";
   let constructor =
     "mlir::torch::TorchConversion::createFinalizingBackendTypeConversionPass()";
+  let description = [{
+    Analogous in scope to the upstream `finalizing-bufferize` pass.
+    See details there.
+  }];
+}
+
+def FinalizingFrontendTypeConversion
+    : Pass<"torch-finalizing-frontend-type-conversion", "func::FuncOp"> {
+  let summary = "Finalizes a partial conversion back to torch tensors";
+  let constructor =
+    "mlir::torch::TorchConversion::createFinalizingFrontendTypeConversionPass()";
   let description = [{
     Analogous in scope to the upstream `finalizing-bufferize` pass.
     See details there.

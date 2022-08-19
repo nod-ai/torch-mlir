@@ -46,8 +46,13 @@ createVerifyInvariantsBeforeBackendLoweringPass();
 
 std::unique_ptr<OperationPass<ModuleOp>> createFuncBackendTypeConversionPass();
 
+std::unique_ptr<OperationPass<ModuleOp>> createFuncFrontendTypeConversionPass();
+
 std::unique_ptr<OperationPass<func::FuncOp>>
 createFinalizingBackendTypeConversionPass();
+
+std::unique_ptr<OperationPass<func::FuncOp>>
+createFinalizingFrontendTypeConversionPass();
 
 std::unique_ptr<OperationPass<ModuleOp>>
 createVerifyLinalgOnTensorsBackendContractPass();
