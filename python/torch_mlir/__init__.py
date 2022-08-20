@@ -211,7 +211,6 @@ def compile(model: torch.nn.Module,
 
         mb = ModuleBuilder()
         mb.import_onnx_file(temp_onnx.name)
-        print(mb.module)
 
         run_pipeline_with_repro_report(mb.module,
                                        "onnx-to-torch-pipeline",

@@ -52,6 +52,7 @@ public:
     ConversionTarget target(*context);
     target.addLegalDialect<torch::Torch::TorchDialect,
                            torch::TorchConversion::TorchConversionDialect>();
+    target.addIllegalDialect<mlir::ONNXDialect>();
 
     TypeConverter typeConverter;
     typeConverter.addConversion([](Type type) { return type; });
