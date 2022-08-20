@@ -29,6 +29,23 @@ using namespace mlir::torch;
 using namespace mlir::torch::Torch;
 
 namespace {
+class ConvertONNXConstantOp : public OpConversionPattern<ONNXConstantOp> {
+public:
+  using OpConversionPattern::OpConversionPattern;
+  LogicalResult
+  matchAndRewrite(ONNXConstantOp op, OpAdaptor adaptor,
+                  ConversionPatternRewriter &rewriter) const override {
+    if (!op.value().has_value())
+      return rewriter.notifyMatchFailure(op, "unimplemented: non-dense values are unsupported");
+    ElementsAttr value = adaptor.valueAttr();
+    auto newResultType = getTypeConverter()->convertType(op.getResult().getType());
+    rewriter.replaceOpWithNewOp<NonValueTensorLiteralOp>(op, newResultType, value);
+    return success();
+  }
+};
+} // namespace
+
+namespace {
 class ConvertONNXAddOp : public OpConversionPattern<ONNXAddOp> {
 public:
   using OpConversionPattern::OpConversionPattern;
@@ -48,6 +65,8 @@ void mlir::torch::onnx_to_torch::populateBasicPatternsAndLegality(
     TypeConverter &typeConverter, RewritePatternSet &patterns,
     ConversionTarget &target) {
   MLIRContext *context = patterns.getContext();
+  target.addIllegalOp<ONNXConstantOp>();
+  patterns.add<ConvertONNXConstantOp>(typeConverter, context);
   target.addIllegalOp<ONNXAddOp>();
   patterns.add<ConvertONNXAddOp>(typeConverter, context);
 }
