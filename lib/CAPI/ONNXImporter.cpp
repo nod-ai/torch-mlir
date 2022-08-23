@@ -15,6 +15,7 @@
 MlirModule torchMlirImportONNX(MlirContext context, MlirStringRef modelStringRef) {
   std::string model_fname(modelStringRef.data, modelStringRef.length);
   onnx_mlir::ImportOptions options;
+  options.useOnnxModelTypes = true;
   std::string errorStr;
   mlir::OwningOpRef<mlir::ModuleOp> importModule;
   ImportFrontendModelFile(
