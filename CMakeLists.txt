@@ -93,7 +93,11 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR OR TORCH_MLIR_OUT_OF_TREE_
 
   # Don't try to compile the python extensions at the moment. We need
   # to import lots of dependencies from AddMLIRPython to make this work.
-  set(MLIR_ENABLE_BINDINGS_PYTHON 1)
+  if(TORCH_MLIR_OUT_OF_TREE_BUILD)
+    set(MLIR_ENABLE_BINDINGS_PYTHON 0)
+  else()
+    set(MLIR_ENABLE_BINDINGS_PYTHON 1)
+  endif()
   option(TORCH_MLIR_ENABLE_JIT_IR_IMPORTER "Enables JIT IR Importer" ON)
 
   set(TORCH-MLIR_BUILT_STANDALONE 1)
