@@ -4,4 +4,13 @@ add_mlir_dialect_library(TorchMLIRTorchUtils
 
   ADDITIONAL_HEADER_DIRS
   ${PROJECT_SOURCE_DIR}/include/torch-mlir/Dialect/Torch/Utils
-  )
+
+  DEPENDS
+  MLIRTorchOpsIncGen
+  MLIRTorchTypesIncGen
+
+  LINK_LIBS PUBLIC
+  MLIRControlFlowInterfaces
+  MLIRIR
+  MLIRInferTypeOpInterface
+)
